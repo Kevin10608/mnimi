@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNIMI Photobox Portabel - Rental & Event Photobooth</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Custom Configuration (Tema Oren Vintage) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#f96f1d', /* Warna Utama Oren Vintage */
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                        },
+                        vintage: {
+                            bg: '#fbf7f0',       /* Warm paper background */
+                            card: '#fffdf9',     /* Off-white warm card */
+                            warm: '#f3ece1',     /* Border vintage warm */
+                            accent: '#d97706',   /* Gold amber accent */
+                            brown: '#431407'     /* Retro deep brown text */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fbf7f0;
+            color: #292524;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1e9dc;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ea580c;
+            border-radius: 4px;
+        }
+
+        .strip-shadow {
+            box-shadow: 0 10px 25px -5px rgba(234, 88, 12, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-vintage-bg text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- CONTAINER UTAMA -->
+    <div id="app" class="flex-1 flex flex-col">
+
+        <!-- NAVIGATION BAR HEADER -->
+        <header class="bg-vintage-card/90 backdrop-blur-md sticky top-0 z-40 border-b border-vintage-warm shadow-sm transition-all">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-20">
+                    <!-- LOGO MNIMI WITH BADGE IMAGE -->
+                    <div class="flex items-center space-x-3 cursor-pointer group" onclick="switchTab('home')">
+                        <div class="flex items-center cursor-pointer group" onclick="switchTab('home')">
+                        <!-- GANTI SOURCENYA DI SINI (Ganti 'nama-gambar-anda.jpg' dengan file/URL gambar Anda) -->
+                        <img src="logomnimi.png" 
+                             alt="Logo MNIMI Photobox" 
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=200&q=80';" 
+                             class="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform">
+                        </div>
+                        <div>
+                            <span class="font-black text-2xl tracking-tight bg-gradient-to-r from-brand-600 to-amber-800 bg-clip-text text-transparent">MNIMI</span>
+                            <span class="text-xs text-slate-500 font-bold block -mt-1 tracking-wider uppercase">Photobox Portabel</span>
+                        </div>
+                    </div>
+
+                    <!-- DESKTOP NAV -->
+                    <nav class="hidden md:flex items-center space-x-1 font-semibold text-sm">
+                        <button onclick="switchTab('home')" class="nav-link px-4 py-2 rounded-xl text-slate-700 hover:text-brand-600 hover:bg-brand-50 transition">Beranda</button>
+                        <button onclick="switchTab('packages')" class="nav-link px-4 py-2 rounded-xl text-slate-700 hover:text-brand-600 hover:bg-brand-50 transition">Paket Layanan</button>
+                        <button onclick="switchTab('booking')" class="nav-link px-4 py-2 rounded-xl text-slate-700 hover:text-brand-600 hover:bg-brand-50 transition">Booking Online</button>
+                        <button onclick="switchTab('gallery')" class="nav-link px-4 py-2 rounded-xl text-slate-700 hover:text-brand-600 hover:bg-brand-50 transition">Galeri Foto</button>
+                        <button onclick="switchTab('about')" class="nav-link px-4 py-2 rounded-xl text-slate-700 hover:text-brand-600 hover:bg-brand-50 transition">Tentang Kami</button>
+                    </nav>
+
+                    <!-- ACTION BUTTONS -->
+                    <div class="hidden md:flex items-center space-x-3">
+                        <button type="button" onclick="openAdminLoginDirect()" class="cursor-pointer px-4 py-2.5 rounded-xl border-2 border-brand-500 text-brand-600 font-bold text-xs uppercase tracking-wider hover:bg-brand-50 transition flex items-center gap-2">
+                            <i class="fa-solid fa-lock text-sm"></i>
+                            <span>Admin Panel</span>
+                        </button>
+                        <button type="button" onclick="switchTab('booking')" class="cursor-pointer px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-brand-500/20 transition flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-check text-sm"></i>
+                            <span>Sewa Sekarang</span>
+                        </button>
+                    </div>
+
+                    <!-- MOBILE MENU BUTTON -->
+                    <div class="md:hidden flex items-center space-x-2">
+                        <button type="button" onclick="openAdminLoginDirect()" class="p-2 text-brand-600 font-bold text-xs cursor-pointer">
+                            <i class="fa-solid fa-lock text-lg"></i>
+                        </button>
+                        <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="p-2 text-slate-600 hover:text-slate-900 focus:outline-none">
+                            <i class="fa-solid fa-bars text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOBILE NAV MENU -->
+            <div id="mobileMenu" class="hidden md:hidden bg-vintage-card border-b border-vintage-warm px-4 pt-2 pb-4 space-y-2">
+                <button onclick="switchTab('home'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-slate-700 font-semibold hover:bg-brand-50">Beranda</button>
+                <button onclick="switchTab('packages'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-slate-700 font-semibold hover:bg-brand-50">Paket Layanan</button>
+                <button onclick="switchTab('booking'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-slate-700 font-semibold hover:bg-brand-50">Booking Online</button>
+                <button onclick="switchTab('gallery'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-slate-700 hover:bg-brand-50 font-semibold">Galeri Foto</button>
+                <button onclick="switchTab('about'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-slate-700 font-semibold hover:bg-brand-50">Tentang Kami</button>
+                <div class="pt-2 border-t border-slate-200 flex flex-col space-y-2">
+                    <button type="button" onclick="openAdminLoginDirect(); toggleMobileMenu()" class="w-full py-2.5 rounded-xl border border-brand-500 text-brand-600 font-bold text-center text-sm cursor-pointer">
+                        <i class="fa-solid fa-lock mr-2"></i>Akses Admin Panel
+                    </button>
+                    <button onclick="switchTab('booking'); toggleMobileMenu()" class="w-full py-2.5 rounded-xl bg-brand-500 text-white font-bold text-center text-sm">
+                        <i class="fa-solid fa-calendar-check mr-2"></i>Sewa Sekarang
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTAINER CONTENT -->
+        <main class="flex-1">
+
+            <!-- HOME TAB SECTION -->
+            <section id="tab-home" class="tab-page">
+                <!-- HERO BANNER -->
+                <div class="relative overflow-hidden py-12 lg:py-20 bg-gradient-to-b from-brand-100/50 via-vintage-bg to-vintage-bg">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                            <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 border border-brand-300 text-brand-700 text-xs font-bold uppercase tracking-wider">
+                                    <i class="fa-solid fa-bolt text-brand-500"></i> Photobox Portabel Instant Print
+                                </span>
+                                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-tight">
+                                    Abadikan Momen Manis Event Anda dengan <span class="bg-gradient-to-r from-brand-600 to-amber-700 bg-clip-text text-transparent">MNIMI Photobox</span>
+                                </h1>
+                                <p class="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
+                                    Solusi photo booth portabel ringkas & estetik untuk acara pernikahan, wisuda, bazar kampus, dan ulang tahun di Kota Padang & sekitarnya. Cetak instan + file digital siap diakses QR!
+                                </p>
+                                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                                    <button onclick="switchTab('booking')" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-500 hover:bg-brand-600 text-white font-extrabold text-sm uppercase tracking-wider shadow-lg shadow-brand-500/30 transition transform hover:-translate-y-0.5">
+                                        <i class="fa-solid fa-calendar-plus mr-2"></i> Booking Event Sekarang
+                                    </button>
+                                    <button onclick="switchTab('packages')" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white border border-slate-300 hover:border-brand-500 text-slate-700 font-bold text-sm uppercase tracking-wider transition">
+                                        Lihat Paket Layanan
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="lg:col-span-5 flex justify-center">
+                                <div class="relative w-full max-w-md">
+                                    <div class="bg-vintage-card rounded-3xl p-4 border border-vintage-warm shadow-xl">
+                                        <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=800&q=80" alt="Photobox Booth Event" class="rounded-2xl w-full h-80 object-cover">
+                                        <div class="mt-4 flex items-center justify-between p-3 bg-brand-50 rounded-xl border border-brand-200">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-xl bg-brand-500 text-white flex items-center justify-center">
+                                                    <i class="fa-solid fa-print text-lg"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="font-bold text-xs text-slate-900">Thermal Dye Sublimation</div>
+                                                    <div class="text-[11px] text-slate-500">Cetak anti air & tahan pudar</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-xs font-bold text-brand-600">12 Detik / Foto</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEATURES HIGHLIGHT -->
+                <div class="py-16 bg-white border-y border-vintage-warm">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center space-y-3 mb-12">
+                            <h2 class="text-3xl font-extrabold text-slate-900">Mengapa Memilih MNIMI Photobox Portabel?</h2>
+                            <p class="text-slate-600 max-w-xl mx-auto text-sm">Kemudahan photobox fleksibel yang siap dipasang di mana saja.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                            <div class="bg-vintage-bg p-6 rounded-2xl border border-vintage-warm space-y-3">
+                                <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center text-xl font-bold">
+                                    <i class="fa-solid fa-truck-fast"></i>
+                                </div>
+                                <h3 class="font-bold text-lg text-slate-900">Portabel & Ringkas</h3>
+                                <p class="text-slate-600 text-xs leading-relaxed">Tidak butuh tempat permanen. Kami bawa & rakit peralatan 30 menit sebelum event dimulai.</p>
+                            </div>
+                            <div class="bg-vintage-bg p-6 rounded-2xl border border-vintage-warm space-y-3">
+                                <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center text-xl font-bold">
+                                    <i class="fa-solid fa-paintbrush"></i>
+                                </div>
+                                <h3 class="font-bold text-lg text-slate-900">Custom Design Frame</h3>
+                                <p class="text-slate-600 text-xs leading-relaxed">Bebas pasang tulisan nama, tanggal, serta logo custom event/sponsor sesuai selera Anda.</p>
+                            </div>
+                            <div class="bg-vintage-bg p-6 rounded-2xl border border-vintage-warm space-y-3">
+                                <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center text-xl font-bold">
+                                    <i class="fa-solid fa-qrcode"></i>
+                                </div>
+                                <h3 class="font-bold text-lg text-slate-900">QR Instant Softfile</h3>
+                                <p class="text-slate-600 text-xs leading-relaxed">Tamu bisa langsung scan QR Code di layar photobox untuk mengunduh softfile foto digital HD.</p>
+                            </div>
+                            <div class="bg-vintage-bg p-6 rounded-2xl border border-vintage-warm space-y-3">
+                                <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center text-xl font-bold">
+                                    <i class="fa-solid fa-clock shadow-sm"></i>
+                                </div>
+                                <h3 class="font-bold text-lg text-slate-900">Tanpa Batas Cetak</h3>
+                                <p class="text-slate-600 text-xs leading-relaxed">Paket unlimited photo print selama durasi sewa berlangsung tanpa khawatir kehabisan kuota.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PACKAGES TAB SECTION -->
+            <section id="tab-packages" class="tab-page hidden py-12">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                    <div class="text-center space-y-3">
+                        <h2 class="text-3xl font-extrabold text-slate-900">Pilihan Paket Layanan Photobox</h2>
+                        <p class="text-slate-600 text-sm max-w-lg mx-auto">Pilih durasi dan fasilitas photobox portabel sesuai dengan skala acara Anda.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Paket 1 -->
+                        <div class="bg-vintage-card rounded-3xl p-8 border border-vintage-warm shadow-sm hover:border-brand-400 transition space-y-6 flex flex-col justify-between">
+                            <div class="space-y-4">
+                                <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase">Paket Mini Event</span>
+                                <div class="text-4xl font-black text-slate-900">Rp 1.200.000 <span class="text-xs font-normal text-slate-500">/ 2 Jam</span></div>
+                                <p class="text-xs text-slate-600">Cocok untuk acara ulang tahun kecil, graduation party, dan gathering intim.</p>
+                                <hr class="border-vintage-warm">
+                                <ul class="space-y-3 text-xs text-slate-700 font-medium">
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Durasi Operasional 2 Jam</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Unlimited Physical Print 4R Strip</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Free Softfile Foto via QR Code</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Standard Custom Frame Template</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> 1 Operator Professional</li>
+                                </ul>
+                            </div>
+                            <button onclick="selectPackageAndBook('Paket Mini Event', 1200000)" class="w-full py-3.5 rounded-xl border-2 border-brand-500 text-brand-600 font-extrabold text-xs uppercase hover:bg-brand-50 transition">Pilih Paket Mini</button>
+                        </div>
+
+                        <!-- Paket 2 (Popular) -->
+                        <div class="bg-vintage-card rounded-3xl p-8 border-2 border-brand-500 shadow-xl relative space-y-6 flex flex-col justify-between transform md:-translate-y-2">
+                            <span class="absolute -top-3.5 right-6 px-4 py-1 rounded-full bg-brand-500 text-white text-xs font-bold uppercase tracking-wider shadow">Paling Favorit</span>
+                            <div class="space-y-4">
+                                <span class="px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase">Paket Clasic Event</span>
+                                <div class="text-4xl font-black text-slate-900">Rp 1,500.000 <span class="text-xs font-normal text-slate-500">/ 3 Jam</span></div>
+                                <p class="text-xs text-slate-600">Pilihan pas untuk wisuda kampus, bazar, dan resepsi pesta sedang.</p>
+                                <hr class="border-vintage-warm">
+                                <ul class="space-y-3 text-xs text-slate-700 font-medium">
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Durasi Operasional 3 Jam</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Unlimited Physical Print 4R Strip / Full</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Custom Frame + Nama Event & Logo</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Free Softfile & GIF Motion via QR</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Fun Fun Props (Kacamata, Topi, Wig)</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> 2 Crew Operator Standby</li>
+                                </ul>
+                            </div>
+                            <button onclick="selectPackageAndBook('Paket Clasic Event', 1500000)" class="w-full py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-extrabold text-xs uppercase shadow-md transition">Pilih Paket Clasic event</button>
+                        </div>
+
+                        <!-- Paket 3 -->
+                        <div class="bg-vintage-card rounded-3xl p-8 border border-vintage-warm shadow-sm hover:border-brand-400 transition space-y-6 flex flex-col justify-between">
+                            <div class="space-y-4">
+                                <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase">Paket Celebration</span>
+                                <div class="text-4xl font-black text-slate-900">Rp 1.900.000 <span class="text-xs font-normal text-slate-500">/ 4 Jam</span></div>
+                                <p class="text-xs text-slate-600">Layanan penuh untuk pernikahan besar, gala dinner corporate & festival.</p>
+                                <hr class="border-vintage-warm">
+                                <ul class="space-y-3 text-xs text-slate-700 font-medium">
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Durasi Operasional 5 Jam</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Unlimited Print Strip & Single Photo</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Unlimited Custom Frame & Template</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Full Album Book + File Master Google Drive</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-2"></i> Lighting Softbox & Backdrop Custom</li>
+                                </ul>
+                            </div>
+                            <button onclick="selectPackageAndBook('Paket Celebration', 1900000)" class="w-full py-3.5 rounded-xl border-2 border-brand-500 text-brand-600 font-extrabold text-xs uppercase hover:bg-brand-50 transition">Pilih Paket Celebration</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BOOKING ONLINE TAB SECTION -->
+            <section id="tab-booking" class="tab-page hidden py-12">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                    <div class="text-center space-y-2">
+                        <h2 class="text-3xl font-extrabold text-slate-900">Form Pemesanan & Custom Photobox</h2>
+                        <p class="text-slate-600 text-sm">Isi tanggal event dan kustomisasi tulisan frame cetakan Anda.</p>
+                    </div>
+
+                    <div class="bg-vintage-card rounded-3xl p-6 sm:p-10 border border-vintage-warm shadow-md">
+                        <form id="bookingForm" onsubmit="submitBooking(event)" class="space-y-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-4">
+                                    <h3 class="font-bold text-slate-900 border-b border-vintage-warm pb-2 text-sm uppercase tracking-wider text-brand-600">1. Data Pemesan & Event</h3>
+                                    
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Pemesan / Panitia</label>
+                                        <input type="text" id="custName" required placeholder="Contoh: Sarah Az-Zahra" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp Active</label>
+                                        <input type="tel" id="custPhone" required placeholder="08123456789" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500">
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Acara</label>
+                                            <input type="date" id="eventDate" required onchange="checkScheduleAvailability()" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-700 mb-1">Jam Mulai</label>
+                                            <input type="time" id="eventTime" required class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500">
+                                        </div>
+                                    </div>
+                                    <div id="scheduleStatusBox" class="hidden p-3 rounded-xl text-xs font-bold"></div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Lokasi Lengkap Acara</label>
+                                        <textarea id="eventLocation" rows="2" required placeholder="Nama Gedung / Kafe / Rumah di Kota Padang..." class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <h3 class="font-bold text-slate-900 border-b border-vintage-warm pb-2 text-sm uppercase tracking-wider text-brand-600">2. Pilih Paket & Custom Frame</h3>
+                                    
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Pilihan Paket Layanan</label>
+                                        <select id="selectedPackage" onchange="updateBookingTotal()" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-semibold focus:ring-2 focus:ring-brand-500">
+                                            <option value="1200000" data-name="Paket Mini Event">Paket Mini Event (2 Jam) - Rp 1.200.000</option>
+                                            <option value="1500000" data-name="Paket Classic Event" selected>Paket Classic Event (3 Jam) - Rp 1.500.000</option>
+                                            <option value="1900000" data-name="Paket Celebration">Paket Celebration (4 Jam) - Rp 1.900.000</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Tulisan Utama di Frame Foto</label>
+                                        <input type="text" id="frameTitleText" oninput="updateLiveFramePreview()" placeholder="Dies natalis PNP ke 39" value="Dies natalis PNP ke 39" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal / Sub-tulisan Frame</label>
+                                        <input type="text" id="frameSubText" oninput="updateLiveFramePreview()" placeholder="5 October 2026" value="5 October 2026" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500">
+                                    </div>
+
+                                    <!-- LIVE FRAME PREVIEW BOX -->
+                                    <div class="bg-vintage-bg p-4 rounded-2xl border border-vintage-warm flex flex-col items-center justify-center">
+                                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">Live Frame Strip Preview</span>
+                                        <div id="framePreviewBox" class="w-44 h-80 bg-white rounded-lg shadow-md p-2 flex flex-col justify-between border-4 border-brand-500 transition-all">
+                                            <div class="space-y-1 flex-1 flex flex-col justify-between my-1">
+                                                <img src="IMG_3428.JPG.jpeg" alt="Frame Sample 1" class="w-full h-20 object-cover rounded border">
+                                                <img src="IMG_3433.JPG.jpeg" alt="Frame Sample 2" class="w-full h-20 object-cover rounded border">
+                                                <img src="IMG_3858.JPG.jpeg" alt="Frame Sample 3" class="w-full h-20 object-cover rounded border">
+                                            </div>
+                                            <div class="text-center pt-1.5 border-t border-slate-200">
+                                                <div id="previewTitleDisplay" class="font-bold text-[11px] text-slate-800 truncate">Dies natalis PNP ke 39 </div>
+                                                <div id="previewSubDisplay" class="text-[9px] text-slate-500 truncate">5 October 2026</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="border-vintage-warm">
+
+                            <!-- PAYMENT INFO SUMMARY -->
+                            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-brand-50 p-6 rounded-2xl border border-brand-200">
+                                <div>
+                                    <div class="text-xs text-slate-500 font-bold uppercase">Ringkasan Pembayaran</div>
+                                    <div id="displayTotalCost" class="text-3xl font-black text-brand-600">Total: Rp 750.000</div>
+                                    <div class="text-xs text-slate-600 mt-1">Uang Muka (DP 40%): <b id="displayDP">Rp 300.000</b> (Pelunasan saat acara)</div>
+                                </div>
+                                <button type="submit" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-extrabold text-sm uppercase shadow-lg shadow-brand-500/20">
+                                    Kirim Booking & Bayar DP
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GALLERY PHOTO TAB SECTION -->
+            <section id="tab-gallery" class="tab-page hidden py-12">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                    <div class="text-center space-y-2">
+                        <h2 class="text-3xl font-extrabold text-slate-900">Galeri Hasil Cetak & Digital Softfile</h2>
+                        <p class="text-slate-600 text-sm">Contoh keseruan tamu event yang menggunakan MNIMI Photobox Portabel.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-vintage-card rounded-2xl overflow-hidden border border-vintage-warm shadow-sm space-y-3 p-3">
+                            <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=600&q=80" alt="Gallery Photo 1" class="w-full h-64 object-cover rounded-xl">
+                            <div class="p-2 flex items-center justify-between">
+                                <div>
+                                    <div class="font-bold text-sm text-slate-800">Graduation Party UNAND</div>
+                                    <div class="text-xs text-slate-500">Frame Strip Custom Vintage</div>
+                                </div>
+                                <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600">
+                                    <i class="fa-solid fa-qrcode text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-vintage-card rounded-2xl overflow-hidden border border-vintage-warm shadow-sm space-y-3 p-3">
+                            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Gallery Photo 2" class="w-full h-64 object-cover rounded-xl">
+                            <div class="p-2 flex items-center justify-between">
+                                <div>
+                                    <div class="font-bold text-sm text-slate-800">Wedding Rizky & Maya</div>
+                                    <div class="text-xs text-slate-500">Floral Gold Photobooth</div>
+                                </div>
+                                <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600">
+                                    <i class="fa-solid fa-qrcode text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-vintage-card rounded-2xl overflow-hidden border border-vintage-warm shadow-sm space-y-3 p-3">
+                            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=80" alt="Gallery Photo 3" class="w-full h-64 object-cover rounded-xl">
+                            <div class="p-2 flex items-center justify-between">
+                                <div>
+                                    <div class="font-bold text-sm text-slate-800">Sweet 17th Party</div>
+                                    <div class="text-xs text-slate-500">Fun Props & Neon Frame</div>
+                                </div>
+                                <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600">
+                                    <i class="fa-solid fa-qrcode text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ABOUT US TAB SECTION -->
+            <section id="tab-about" class="tab-page hidden py-12">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="bg-vintage-card rounded-3xl p-8 border border-vintage-warm shadow-sm space-y-6">
+                        <h1 class="text-3xl font-extrabold text-slate-900">Tentang Mnimi Photobox Portabel</h1>
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                            <!-- FOTO DISAMPING TULISAN TENTANG KAMI -->
+                            <div class="md:col-span-4 flex justify-center">
+                                <img src="logomnimi.png" 
+                                     alt="Logo MNIMI Photobox" 
+                                     onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80';"
+                                     class="w-full max-w-xs h-auto rounded-2xl shadow-lg border-2 border-vintage-warm object-cover">
+                            </div>
+                            
+                            <!-- DESKRIPSI USAHA -->
+                            <div class="md:col-span-8">
+                                <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+                                    <b>MNIMI PHOTOBOX</b> merupakan usaha jasa photobox portable yang menyediakan layanan foto dan cetak instan di lokasi acara pelanggan. Unit photobooth dibawa dan dipasang hanya ketika terdapat pemesanan, sehingga usaha tidak membutuhkan tempat operasional permanen. Layanan ditujukan untuk acara kampus, wisuda, ulang tahun, pernikahan, gathering, bazar, dan kegiatan komunitas di Kota Padang serta wilayah sekitarnya. Keunggulan yang ditawarkan adalah layanan yang fleksibel, paket harga yang jelas, desain frame sesuai tema acara, hasil cetak langsung, file digital, serta perlengkapan yang ringkas dan mudah dipindahkan. Pemesanan dilakukan melalui WhatsApp Business dan media sosial. Setiap pemesanan dikonfirmasi melalui penawaran tertulis yang mencantumkan tanggal, lokasi, durasi, kuota cetak, biaya transportasi, dan ketentuan pembayaran.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ADMIN DASHBOARD PANEL TAB (FULL APPLICATION MANAGEMENT) -->
+            <section id="tab-admin" class="tab-page hidden bg-slate-100 min-h-screen py-8">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                    
+                    <!-- ADMIN HEADER STATUS BAR -->
+                    <div class="bg-vintage-card rounded-2xl p-6 border border-vintage-warm shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-14 h-14 rounded-2xl bg-brand-500 text-white flex items-center justify-center text-2xl font-bold shadow-md">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <div>
+                                <h1 class="text-2xl font-black text-slate-900">Admin Dashboard - Mnimi Photobox</h1>
+                                <p class="text-xs text-slate-500 font-medium flex items-center gap-2 mt-0.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                                    Sistem Operasional & Management Penyewaan Active
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="switchTab('home')" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-50 text-xs font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-eye"></i> Lihat Web Client
+                            </button>
+                            <button onclick="logoutAdmin()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition flex items-center gap-2 shadow-sm">
+                                <i class="fa-solid fa-right-from-bracket"></i> Keluar (Logout)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STATS / METRICS CARDS -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                            <div>
+                                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Pendapatan</div>
+                                <div id="adminTotalRevenue" class="text-2xl font-black text-slate-800 mt-1">Rp 12.500.000</div>
+                                <div class="text-[11px] text-emerald-600 font-semibold mt-1"><i class="fa-solid fa-arrow-up"></i> +18% bulan ini</div>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                            <div>
+                                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Booking Event</div>
+                                <div id="adminTotalBookings" class="text-2xl font-black text-slate-800 mt-1">24 Event</div>
+                                <div class="text-[11px] text-brand-600 font-semibold mt-1">Acara Kampus & Party</div>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-calendar-check"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                            <div>
+                                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Menunggu DP</div>
+                                <div id="adminPendingDP" class="text-2xl font-black text-amber-600 mt-1">3 Booking</div>
+                                <div class="text-[11px] text-slate-500 font-semibold mt-1">Perlu Verifikasi</div>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                            <div>
+                                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Unit Hardware Ready</div>
+                                <div class="text-2xl font-black text-emerald-600 mt-1">4 / 4 Unit</div>
+                                <div class="text-[11px] text-emerald-600 font-semibold mt-1">Kondisi 100% Bagus</div>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-box-open"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB SECTIONS INSIDE ADMIN PANEL -->
+                    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                        <!-- Navigation Sub-tabs -->
+                        <div class="flex border-b border-slate-200 bg-slate-50 overflow-x-auto">
+                            <button onclick="switchAdminSubTab('bookings')" id="adminSubTab-bookings" class="px-6 py-4 font-bold text-sm text-brand-600 border-b-2 border-brand-500 whitespace-nowrap">
+                                <i class="fa-solid fa-list-check mr-2"></i>Kelola Booking & DP
+                            </button>
+                            <button onclick="switchAdminSubTab('schedule')" id="adminSubTab-schedule" class="px-6 py-4 font-bold text-sm text-slate-500 hover:text-slate-800 whitespace-nowrap">
+                                <i class="fa-solid fa-calendar-days mr-2"></i>Kalender Event
+                            </button>
+                            <button onclick="switchAdminSubTab('hardware')" id="adminSubTab-hardware" class="px-6 py-4 font-bold text-sm text-slate-500 hover:text-slate-800 whitespace-nowrap">
+                                <i class="fa-solid fa-toolbox mr-2"></i>Checklist Alat (Fleet)
+                            </button>
+                            <button onclick="switchAdminSubTab('packages')" id="adminSubTab-packages" class="px-6 py-4 font-bold text-sm text-slate-500 hover:text-slate-800 whitespace-nowrap">
+                                <i class="fa-solid fa-tags mr-2"></i>Paket & Harga
+                            </button>
+                        </div>
+
+                        <!-- SUB CONTENT 1: KELOLA BOOKING -->
+                        <div id="adminContent-bookings" class="p-6 space-y-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                <h3 class="text-lg font-bold text-slate-900">Daftar Pemesanan Penyewaan Photobox</h3>
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" id="adminSearchInput" onkeyup="filterAdminBookings()" placeholder="Cari nama / lokasi..." class="px-4 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500">
+                                </div>
+                            </div>
+
+                            <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                                <table class="w-full text-left text-sm text-slate-600">
+                                    <thead class="bg-slate-50 text-slate-700 uppercase font-bold text-xs border-b border-slate-200">
+                                        <tr>
+                                            <th class="p-4">ID / Tanggal Event</th>
+                                            <th class="p-4">Nama Pelanggan</th>
+                                            <th class="p-4">Paket & Lokasi</th>
+                                            <th class="p-4">Total Biaya</th>
+                                            <th class="p-4">Status DP / Pembayaran</th>
+                                            <th class="p-4 text-center">Aksi Management</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminBookingTableBody" class="divide-y divide-slate-100 font-medium">
+                                        <!-- Rendered via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- SUB CONTENT 2: KALENDER EVENT -->
+                        <div id="adminContent-schedule" class="p-6 hidden space-y-4">
+                            <h3 class="text-lg font-bold text-slate-900">Jadwal Operasional & Event Terjadwal</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="adminCalendarList">
+                                <!-- Rendered via JS -->
+                            </div>
+                        </div>
+
+                        <!-- SUB CONTENT 3: CHECKLIST HARDWARE PERALATAN -->
+                        <div id="adminContent-hardware" class="p-6 hidden space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900">Kondisi Peralatan Photobox Portable</h3>
+                                    <p class="text-xs text-slate-500">Memastikan seluruh perlengkapan siap dibawa ke lokasi event pelanggan.</p>
+                                </div>
+                                <button onclick="addNewHardwareItem()" class="px-4 py-2 rounded-xl bg-brand-500 text-white font-bold text-xs">
+                                    <i class="fa-solid fa-plus mr-1"></i> Tambah Alat
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="adminHardwareGrid">
+                                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+                                            <i class="fa-solid fa-camera"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-slate-800 text-sm">Kamera DSLR Canon EOS 200D II</div>
+                                            <div class="text-xs text-slate-500">Unit 01 - Kondisi Baik & Lensa Bersih</div>
+                                        </div>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs">READY</span>
+                                </div>
+
+                                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
+                                            <i class="fa-solid fa-print"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-slate-800 text-sm">Printer Thermal DNP DS620</div>
+                                            <div class="text-xs text-slate-500">Kertas & Ribbon Terpasang Full</div>
+                                        </div>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs">READY</span>
+                                </div>
+
+                                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold">
+                                            <i class="fa-solid fa-laptop"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-slate-800 text-sm">Mini PC & Monitor Touchscreen</div>
+                                            <div class="text-xs text-slate-500">Software Software Booth V3.2 Active</div>
+                                        </div>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs">READY</span>
+                                </div>
+
+                                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
+                                            <i class="fa-solid fa-lightbulb"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-slate-800 text-sm">Ring Light Softbox 18-inch</div>
+                                            <div class="text-xs text-slate-500">Kabel Extension 15 Meter</div>
+                                        </div>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs">READY</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SUB CONTENT 4: PAKET LAYANAN & HARGA -->
+                        <div id="adminContent-packages" class="p-6 hidden space-y-4">
+                            <h3 class="text-lg font-bold text-slate-900">Kelola Paket Penyewaan</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
+                                    <div class="font-bold text-brand-600">Paket Mini Event</div>
+                                    <div class="text-2xl font-extrabold text-slate-800">Rp 1,200.000</div>
+                                    <div class="text-xs text-slate-500">Durasi: 2 Jam • Unlimited Print</div>
+                                    <button class="w-full py-2 rounded-xl border border-slate-300 text-xs font-bold hover:bg-slate-50">Edit Paket</button>
+                                </div>
+                                <div class="p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
+                                    <div class="font-bold text-amber-600">Paket Party Clasic Event</div>
+                                    <div class="text-2xl font-extrabold text-slate-800">Rp 1.500.000</div>
+                                    <div class="text-xs text-slate-500">Durasi: 3 Jam • Custom Frame</div>
+                                    <button class="w-full py-2 rounded-xl border border-slate-300 text-xs font-bold hover:bg-slate-50">Edit Paket</button>
+                                </div>
+                                <div class="p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
+                                    <div class="font-bold text-slate-800">Paket Celebration</div>
+                                    <div class="text-2xl font-extrabold text-slate-800">Rp 1.900.000</div>
+                                    <div class="text-xs text-slate-500">Durasi: 5 Jam • All Feature</div>
+                                    <button class="w-full py-2 rounded-xl border border-slate-300 text-xs font-bold hover:bg-slate-50">Edit Paket</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER BAR -->
+        <footer class="bg-vintage-card border-t border-vintage-warm py-8 mt-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <div class="font-black text-lg text-slate-900">MNIMI Photobox Portabel</div>
+                    <div class="text-xs text-slate-500">Layanan Penyewaan Photo Booth Instan Kota Padang</div>
+                </div>
+                <div class="text-xs text-slate-500">
+                    &copy; 2026 MNIMI Photobox. All rights reserved.
+                </div>
+            </div>
+        </footer>
+
+        <!-- ADMIN LOGIN MODAL DIALOG -->
+        <div id="adminLoginModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+            <div class="bg-vintage-card rounded-3xl p-8 border border-vintage-warm w-full max-w-md shadow-2xl space-y-6">
+                <div class="text-center space-y-2">
+                    <div class="w-16 h-16 rounded-2xl bg-brand-500 text-white flex items-center justify-center text-3xl font-bold mx-auto shadow-lg shadow-brand-500/30">
+                        <i class="fa-solid fa-user-lock"></i>
+                    </div>
+                    <h2 class="text-2xl font-black text-slate-900">Login Admin Mnimi</h2>
+                    <p class="text-xs text-slate-500">Masukkan kredensial pengelola usaha untuk membuka dashboard.</p>
+                </div>
+
+                <div id="adminLoginError" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold text-center">
+                    Username atau Password salah!
+                </div>
+
+                <form onsubmit="handleAdminAuth(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Username</label>
+                        <input type="text" id="adminUser" required value="admin" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+                        <input type="password" id="adminPass" required value="admin123" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 font-semibold">
+                    </div>
+                    <div class="text-[11px] text-amber-700 bg-amber-50 p-3 rounded-xl border border-amber-200">
+                        <i class="fa-solid fa-lightbulb mr-1"></i> Demo Login: Username: <b>admin</b> | Password: <b>admin123</b>
+                    </div>
+                    <div class="flex space-x-3 pt-2">
+                        <button type="button" onclick="closeAdminLogin()" class="w-1/2 py-3 rounded-xl border border-slate-300 font-bold text-xs text-slate-600 hover:bg-slate-50">Batal</button>
+                        <button type="submit" class="w-1/2 py-3 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs shadow-md">Masuk Dashboard</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC & APPLICATION CONTROLLER -->
+    <script>
+        // Data Simulated Database
+        let bookingsDB = [
+            { id: 'MNM-20261025', name: 'Sarah & Budi', date: '2026-10-25', time: '14:00', location: 'Gedung KORPRI Padang', package: 'Paket Clasic Event', total: 1500000, dp: 300000, status: 'Dikonfirmasi', paymentStatus: 'DP Lunas' },
+            { id: 'MNM-20261102', name: 'Fakultas Teknik UNAND', date: '2026-11-02', time: '09:00', location: 'Auditorium UNAND', package: 'Paket Celebration', total: 1900000, dp: 500000, status: 'Dikonfirmasi', paymentStatus: 'DP Lunas' },
+            { id: 'MNM-20261110', name: 'Rani Sweet 17th', date: '2026-11-10', time: '19:00', location: 'Cafe Grand Padang', package: 'Paket Mini Event', total: 1200000, dp: 0, status: 'Menunggu DP', paymentStatus: 'Belum DP' }
+        ];
+
+        let isAdminLoggedIn = false;
+
+        // On DOM Loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBookingTotal();
+            updateLiveFramePreview();
+        });
+
+        // Tab Navigation Switcher
+        function switchTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-page');
+            tabs.forEach(tab => tab.classList.add('hidden'));
+
+            const target = document.getElementById('tab-' + tabId);
+            if (target) {
+                target.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            if (tabId === 'admin') {
+                renderAdminDashboard();
+            }
+        }
+
+        // Mobile Navigation Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Direct Login Trigger for Admin Panel
+        function openAdminLoginDirect() {
+            if (isAdminLoggedIn) {
+                switchTab('admin');
+                renderAdminDashboard();
+            } else {
+                const modal = document.getElementById('adminLoginModal');
+                const errBox = document.getElementById('adminLoginError');
+                if (errBox) errBox.classList.add('hidden');
+                if (modal) modal.classList.remove('hidden');
+            }
+        }
+
+        function closeAdminLogin() {
+            const modal = document.getElementById('adminLoginModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        // Handle Admin Authentication
+        function handleAdminAuth(e) {
+            e.preventDefault();
+            const u = document.getElementById('adminUser').value;
+            const p = document.getElementById('adminPass').value;
+            const errBox = document.getElementById('adminLoginError');
+
+            if (u === 'admin' && p === 'admin123') {
+                isAdminLoggedIn = true;
+                if (errBox) errBox.classList.add('hidden');
+                closeAdminLogin();
+                switchTab('admin');
+                renderAdminDashboard();
+            } else {
+                if (errBox) errBox.classList.remove('hidden');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            switchTab('home');
+        }
+
+        // Select Package from Packages Card
+        function selectPackageAndBook(pkgName, price) {
+            switchTab('booking');
+            const select = document.getElementById('selectedPackage');
+            for (let i = 0; i < select.options.length; i++) {
+                if (select.options[i].getAttribute('data-name') === pkgName) {
+                    select.selectedIndex = i;
+                    break;
+                }
+            }
+            updateBookingTotal();
+        }
+
+        // Update Total Cost & DP Display
+        function updateBookingTotal() {
+            const select = document.getElementById('selectedPackage');
+            const price = parseInt(select.value) || 0;
+            const dp = price * 0.4;
+
+            document.getElementById('displayTotalCost').innerText = `Total: Rp ${price.toLocaleString('id-ID')}`;
+            document.getElementById('displayDP').innerText = `Rp ${dp.toLocaleString('id-ID')}`;
+        }
+
+        // Update Live Photobox Frame Text Preview
+        function updateLiveFramePreview() {
+            const title = document.getElementById('frameTitleText').value || 'Dies Natalis PNP le';
+            const sub = document.getElementById('frameSubText').value || '5 October 2026';
+
+            document.getElementById('previewTitleDisplay').innerText = title;
+            document.getElementById('previewSubDisplay').innerText = sub;
+        }
+
+        // Check Schedule Availability
+        function checkScheduleAvailability() {
+            const inputDate = document.getElementById('eventDate').value;
+            const box = document.getElementById('scheduleStatusBox');
+            box.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-700', 'bg-rose-100', 'text-rose-700');
+
+            const isTaken = bookingsDB.some(b => b.date === inputDate && b.status === 'Dikonfirmasi');
+            if (isTaken) {
+                box.classList.add('bg-rose-100', 'text-rose-700');
+                box.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> Tanggal ${inputDate} sudah penuh dikena booking event lain. Silakan pilih tanggal lain.`;
+            } else {
+                box.classList.add('bg-emerald-100', 'text-emerald-700');
+                box.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Tanggal ${inputDate} tersedia! Unit Photobox Portable siap meluncur.`;
+            }
+        }
+
+        // Submit Booking Form
+        function submitBooking(e) {
+            e.preventDefault();
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            const date = document.getElementById('eventDate').value;
+            const time = document.getElementById('eventTime').value;
+            const loc = document.getElementById('eventLocation').value;
+            const select = document.getElementById('selectedPackage');
+            const pkgName = select.options[select.selectedIndex].getAttribute('data-name');
+            const price = parseInt(select.value);
+
+            const newId = 'MNM-' + Date.now().toString().slice(-6);
+            bookingsDB.push({
+                id: newId,
+                name: name,
+                date: date,
+                time: time,
+                location: loc,
+                package: pkgName,
+                total: price,
+                dp: 0,
+                status: 'Menunggu DP',
+                paymentStatus: 'Belum DP'
+            });
+
+            // Redirect to WA Confirmation
+            const msg = `Halo Admin MNIMI Photobox! Saya mau konfirmasi booking online:%0ANama: ${name}%0ATanggal: ${date} (${time} WIB)%0ALokasi: ${loc}%0APaket: ${pkgName}%0ATotal Biaya: Rp ${price.toLocaleString('id-ID')}`;
+            window.open(`https://wa.me/6281234567890?text=${msg}`, '_blank');
+        }
+
+        // Switch Admin Inner Sub-tabs
+        function switchAdminSubTab(tabName) {
+            ['bookings', 'schedule', 'hardware', 'packages'].forEach(t => {
+                document.getElementById(`adminContent-${t}`).classList.add('hidden');
+                document.getElementById(`adminSubTab-${t}`).classList.remove('text-brand-600', 'border-b-2', 'border-brand-500');
+                document.getElementById(`adminSubTab-${t}`).classList.add('text-slate-500');
+            });
+
+            document.getElementById(`adminContent-${tabName}`).classList.remove('hidden');
+            document.getElementById(`adminSubTab-${tabName}`).classList.add('text-brand-600', 'border-b-2', 'border-brand-500');
+            document.getElementById(`adminSubTab-${tabName}`).classList.remove('text-slate-500');
+        }
+
+        // Render Admin Dashboard Tables & Lists
+        function renderAdminDashboard() {
+            const tbody = document.getElementById('adminBookingTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            let totalRev = 0;
+            let pendingCount = 0;
+
+            bookingsDB.forEach(item => {
+                totalRev += item.dp;
+                if (item.status === 'Menunggu DP') pendingCount++;
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/80 transition';
+                tr.innerHTML = `
+                    <td class="p-4">
+                        <div class="font-bold text-slate-800">${item.id}</div>
+                        <div class="text-xs text-slate-500"><i class="fa-regular fa-calendar mr-1"></i>${item.date} (${item.time})</div>
+                    </td>
+                    <td class="p-4 font-bold text-slate-800">${item.name}</td>
+                    <td class="p-4">
+                        <div class="text-xs font-bold text-brand-600">${item.package}</div>
+                        <div class="text-xs text-slate-500">${item.location}</div>
+                    </td>
+                    <td class="p-4">
+                        <div class="font-extrabold text-slate-800">Rp ${item.total.toLocaleString('id-ID')}</div>
+                        <div class="text-[11px] text-slate-500">DP: Rp ${item.dp.toLocaleString('id-ID')}</div>
+                    </td>
+                    <td class="p-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold ${item.status === 'Dikonfirmasi' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
+                            ${item.status}
+                        </span>
+                    </td>
+                    <td class="p-4 text-center">
+                        <button onclick="confirmDP('${item.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold mr-1 shadow-sm">
+                            Verifikasi DP
+                        </button>
+                        <button onclick="cancelBooking('${item.id}')" class="px-2 py-1.5 rounded-lg bg-slate-200 text-slate-600 hover:bg-rose-100 hover:text-rose-600 text-xs">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('adminTotalRevenue').innerText = `Rp ${totalRev.toLocaleString('id-ID')}`;
+            document.getElementById('adminTotalBookings').innerText = `${bookingsDB.length} Event`;
+            document.getElementById('adminPendingDP').innerText = `${pendingCount} Booking`;
+
+            // Render Schedule Cards
+            const calList = document.getElementById('adminCalendarList');
+            if (calList) {
+                calList.innerHTML = bookingsDB.map(b => `
+                    <div class="p-4 rounded-2xl border border-slate-200 bg-white space-y-2 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md">${b.date}</span>
+                            <span class="text-xs text-slate-400 font-semibold">${b.time} WIB</span>
+                        </div>
+                        <div class="font-bold text-slate-800 text-sm">${b.name}</div>
+                        <div class="text-xs text-slate-500"><i class="fa-solid fa-location-dot mr-1"></i>${b.location}</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function confirmDP(id) {
+            const item = bookingsDB.find(b => b.id === id);
+            if (item) {
+                item.status = 'Dikonfirmasi';
+                item.paymentStatus = 'DP Lunas';
+                item.dp = item.total * 0.4;
+                renderAdminDashboard();
+            }
+        }
+
+        function cancelBooking(id) {
+            bookingsDB = bookingsDB.filter(b => b.id !== id);
+            renderAdminDashboard();
+        }
+
+        function filterAdminBookings() {
+            const q = document.getElementById('adminSearchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#adminBookingTableBody tr');
+            rows.forEach(r => {
+                const text = r.innerText.toLowerCase();
+                r.style.display = text.includes(q) ? '' : 'none';
+            });
+        }
+
+        function addNewHardwareItem() {
+            const name = prompt("Masukkan Nama Perangkat/Alat Baru:");
+            if (name) {
+                const grid = document.getElementById('adminHardwareGrid');
+                const div = document.createElement('div');
+                div.className = "p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-center justify-between";
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-box"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-slate-800 text-sm">${name}</div>
+                            <div class="text-xs text-slate-500 font-medium">Baru ditambahkan</div>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs">READY</span>
+                `;
+                grid.appendChild(div);
+            }
+        }
+    </script>
+</body>
+</html>
